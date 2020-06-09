@@ -17,8 +17,29 @@ class TreeLinkList():
         else:
             raise Exception('root is not None of head')
 
-    def append(self,):
-        pass
+
+if __name__ == '__main__':
+    dict_tree = {
+        "element": 0,
+        "left": {
+            "element": 1,
+            "left": {
+                "element": 3,
+                "left": 6,
+                "right": 7,
+            }
+        },
+        "right": {
+            "element": 2,
+            "left": 4,
+            "right": {
+                "element": 5,
+                "left": 8,
+                "right": 9,
+            },
+        },
+    }
+
 
 
 
