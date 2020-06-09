@@ -4,19 +4,81 @@ class Node():
         self.left = left
         self.right = right
 
+
 class TreeLinkList():
-    def __init__(self):
-        self._head = None
+    def __init__(self,dict_tree=None):
+        self.head = Node(
+            item=dict_tree.get('element'),
+            left=self.generate(dict_tree.get('left')),
+            right=self.generate(dict_tree.get('right'))
+        )
 
-    def is_empty(self):
-        return self._head.root is None
-
-    def add(self,item,left=None,right=None):
-        if self.is_empty():
-            self._head = Node(item,left=left,right=right)
+    def generate(self,dict_tree):
+        if isinstance(dict_tree.get('left'),dict) and isinstance(dict_tree.get('right'),dict):
+            return Node(
+                item=dict_tree.get('element'),
+                left=self.generate(dict_tree.get('left')),
+                right=self.generate(dict_tree.get('right'))
+            )
+        elif isinstance(dict_tree.get('left'),dict) and not isinstance(dict_tree.get('right'),dict):
+            return Node(
+                item=dict_tree.get('element'),
+                left=self.generate(dict_tree.get('left')),
+                right=Node(item=dict_tree.get('right'),left=None,right=None) if dict_tree.get('right') else None
+            )
+        elif isinstance(dict_tree.get('right'),dict) and not isinstance(dict_tree.get('left'),dict):
+            return Node(
+                item=dict_tree.get('element'),
+                left=Node(item=dict_tree.get('left'),left=None,right=None) if dict_tree.get('left') else None,
+                right=self.generate(dict_tree.get('right'))
+            )
         else:
-            raise Exception('root is not None of head')
+            return Node(
+                item=dict_tree.get('element'),
+                left=Node(item=dict_tree.get('left'),left=None,right=None),
+                right=Node(item=dict_tree.get('right'),left=None,right=None),
+            )
 
+    def front(self):
+        result = []
+        root = self.head
+        def handle(root):
+            if not root:
+                return result
+            else:
+                result.append(root.root)
+                handle(root.left)
+                handle(root.right)
+                return result
+        return handle(root)
+
+    def middle(self):
+        result = []
+        root = self.head
+        def handle(root):
+            if root == None:
+                return result
+            else:
+                handle(root.left)
+                result.append(root.root)
+                handle(root.right)
+                return result
+        return handle(root)
+
+    def behind(self):
+        result = []
+        root = self.head
+
+        def handle(root):
+            if root == None:
+                return result
+            else:
+                handle(root.left)
+                handle(root.right)
+                result.append(root.root)
+                return result
+
+        return handle(root)
 
 if __name__ == '__main__':
     dict_tree = {
@@ -39,6 +101,10 @@ if __name__ == '__main__':
             },
         },
     }
+    tree = TreeLinkList(dict_tree)
+    print(tree.front())
+    print(tree.middle())
+    print(tree.behind())
 
 
 
